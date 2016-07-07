@@ -1,0 +1,23 @@
+[
+  {
+    "name"        : "christian",
+    "cwd"         : ".",
+    "script"      : "app.js",
+    "log_date_format"   : "YYYY-MM-DD HH:mm Z",
+    "merge_logs"    : false,
+    "watch"       : false,
+    "exec_interpreter"  : "node",
+    "exec_mode"     : "fork_mode",
+    "env":
+    {
+      "NODE_ENV"    : "production",
+      "RPC_HOST"    : "192.168.2.115",
+      "RPC_PORT"    : "8101",
+      "LISTENING_PORT"  : "30301",
+      "INSTANCE_NAME"   : "christian",
+      "WS_SERVER"     : "http://localhost:3000",
+      "WS_SECRET"     : "focusdays2016",
+        "VERBOSITY"       : 3
+    }
+  },
+]
