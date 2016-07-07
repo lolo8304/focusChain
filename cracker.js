@@ -5,7 +5,7 @@ contract Cracker         // The contract definition. A constructor of the same n
 
 	event Produced(
         address indexed _from,
-        string indexed _state,
+        string indexed _state
     );
 	
     function Cracker(string _state) public   // The constructor. It accepts a string input and saves it to the contract's "greeting" variable.
