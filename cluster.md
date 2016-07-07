@@ -1,1 +1,1 @@
-geth --networkid="05011970" --datadir focuschainCluster console
+geth --networkid 19700105 --datadir focuschainCluster console
