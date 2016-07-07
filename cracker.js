@@ -3,10 +3,10 @@ contract Cracker         // The contract definition. A constructor of the same n
     address creator;     // At first, an empty "address"-type variable of the name "owner". Will be set in the constructor.
     string state;     // At first, an empty "string"-type variable of the name "greeting". Will be set in constructor and can be changed.
 
-    function Cracker(string _state) public   // The constructor. It accepts a string input and saves it to the contract's "greeting" variable.
+    function Cracker() public   // The constructor. It accepts a string input and saves it to the contract's "greeting" variable.
     {
         creator = msg.sender;
-        state = _state;
+        state = 'INIT';
     }
 
     function getState() constant returns (string)          
