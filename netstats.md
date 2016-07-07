@@ -10,7 +10,7 @@ see
 Starten
 ```./start.sh ```
 
-        ```export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
+        ``` export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
         npm start ```
         
         
@@ -28,7 +28,7 @@ see
 wichtig ist, dass die Node mit ```--rcp``` und ```--rcpaddress <ip> ```gestartet werden
 
 Starten 
-```./startClietns.sh```
+```./startClietns.sh ```
 respektive pm2 start app-<name>.json
 
 Stoppen
@@ -36,7 +36,7 @@ Stoppen
 resp. pm2 stop <name>
 
 Logfiles
-```pm2 logs```
+```pm2 logs ```
 
 
 Config-Beispiel:
