@@ -10,12 +10,11 @@ see
 Starten
 ```./start.sh ```
 
-        ``` export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
-        npm start ```
+        export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
+        npm start
         
         
-Aufruf
-[http://localhost:3000]
+Aufruf [http://localhost:3000]
 
 ####Setup netstats Clients
 Dieses Packet installiert den Client um über RCP die Daten für den privaten netstat abgreift und weiterleitet
