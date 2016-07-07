@@ -10,8 +10,8 @@ see
 Starten
 ```./start.sh ```
 
-        ``` export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
-        npm start ```
+        export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
+        npm start
         
         
 Aufruf
