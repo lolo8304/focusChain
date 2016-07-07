@@ -40,7 +40,7 @@ pm2 logs
 
 
 Config-Beispiel:
-'''
+''' 
 [
   {
     "name"        : "peter",
