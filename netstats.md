@@ -1,4 +1,4 @@
-###Setup netstats
+###Setup Netstats
 ####Setup netstats Server
 Dieses Packet installiert den netstat Server, Zugriff über http://localhost:3000
 
