@@ -5,6 +5,6 @@ Liste der Accounts
 * Peter "0x02d4d44F1864991F82c9c0433CC43f299fBF05B1"
 * Fabian
 * Nicole
-* Christian
+* Christian "0x766D5896c4EE0Ec0b34736661c93BbD42577Fa9E"
 * Rene
 * Roli "0x271bf65b23e9A1A171ABde94cA4f80D8baB5199d"
