@@ -3,44 +3,44 @@
 Dieses Packet installiert den netstat Server, Zugriff über http://localhost:3000
 
 see
-https://github.com/ethereum/go-ethereum/wiki/Setting-up-monitoring-on-local-cluster 
+[https://github.com/ethereum/go-ethereum/wiki/Setting-up-monitoring-on-local-cluster]
     Section Monitoring Site
     
     
 Starten
-./start.sh
+```./start.sh ```
 
-        export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
-        npm start
+        ```export WS_SECRET="focusdays2016"  #dieses Secret muss dann beim Client verwendet werden!
+        npm start ```
         
         
 Aufruf
-http://localhost:3000
+[http://localhost:3000]
 
 ####Setup netstats Clients
 Dieses Packet installiert den Client um über RCP die Daten für den privaten netstat abgreift und weiterleitet
 
 see 
-https://github.com/ethereum/wiki/wiki/Network-Status
-https://github.com/ethereum/go-ethereum/wiki/Setting-up-monitoring-on-local-cluster
+[https://github.com/ethereum/wiki/wiki/Network-Status]
+[https://github.com/ethereum/go-ethereum/wiki/Setting-up-monitoring-on-local-cluster]
 
 
-wichtig ist, dass die Node mit --rcp und --rcpaddress <ip> gestartet werden
+wichtig ist, dass die Node mit ```--rcp``` und ```--rcpaddress <ip> ```gestartet werden
 
 Starten 
-./startClietns.sh
+```./startClietns.sh```
 respektive pm2 start app-<name>.json
 
 Stoppen
-./stopClients.sh
+```./stopClients.sh ```
 resp. pm2 stop <name>
 
 Logfiles
-pm2 logs
+```pm2 logs```
 
 
 Config-Beispiel:
-''' 
+``` 
 [
   {
     "name"        : "peter",
@@ -64,4 +64,4 @@ Config-Beispiel:
     }
   },
 ]
-'''
+```
