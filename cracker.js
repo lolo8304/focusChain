@@ -3,7 +3,11 @@ contract Cracker         // The contract definition. A constructor of the same n
     address creator;     // At first, an empty "address"-type variable of the name "owner". Will be set in the constructor.
     string state;     // At first, an empty "string"-type variable of the name "greeting". Will be set in constructor and can be changed.
 
-	event Produced(
+   event Produced(
+        address indexed _from,
+        string indexed _state
+    );
+   event Sold(
         address indexed _from,
         string indexed _state
     );
@@ -33,6 +37,12 @@ contract Cracker         // The contract definition. A constructor of the same n
 	function deliver() 
     {
         state = 'DELIVERED';
+    }
+    
+	function sell() 
+    {
+        state = 'SOLD';
+		Sold(msg.sender, state);
     }
     
      /**********
