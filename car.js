@@ -140,8 +140,8 @@ contract Car {
     //executed as StVa
     function admit(string _insuranceId, string _policyNo) 
     {
-        if !(state == LifeStates.Supplied or state == LifeStates.ExMatriculated) throw;
-		state = LifeStates.Admitted
+        if (!(state == LifeStates.Supplied) || !(state == LifeStates.ExMatriculated)) throw;
+		state = LifeStates.Admitted;
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
     } 
@@ -149,7 +149,7 @@ contract Car {
     // executed as the customer
     function deliver() 
     {
-		if !(state == LifeStates.Admitted or state == LifeStates.Resold) throw;
+		if (!(state == LifeStates.Admitted) || !(state == LifeStates.Sold)) throw;
         if (customer != msg.sender) throw;
 		state = LifeStates.Delivered;
 		owner = msg.sender;
@@ -160,7 +160,7 @@ contract Car {
 	function sell(address _customer)
 		checkOwner
 	{
-		if !(state == LifeStates.Delivered) throw;
+		if (state == LifeStates.Delivered) throw;
 		state = LifeStates.Sold;
 		owner = _customer;
 		holder = _customer;
