@@ -82,9 +82,13 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-	'click button'(event, instance) {
-		console.log(event);
-		//deployContract(instance);
+	'click button .produce'(event, instance) {
+		if (event.currentTarget.id == "deploy") {
+			//deployContract(instance);
+		}
+		if (event.currentTarget.id == "produce") {
+			console.log("produce");
+		}
 	},
 });
 
