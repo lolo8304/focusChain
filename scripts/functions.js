@@ -15,7 +15,8 @@ console.log("balance = " + balance);
 };
 
 function unlock() {
-personal.unlockAccount(eth.accounts[0],"focusdays2016");
+personal.unlockAccount(eth.accounts[0],"focusdays2016", 5000000000000000000);
+console.log("account unlocked");
 }
 
 //add peers after load
