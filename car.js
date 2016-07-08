@@ -48,6 +48,13 @@ contract Car {
         uint8 _ccm,
         uint8 _price
         );
+    
+    event Produced (
+        address _producer,
+        address _customer,
+        string chassisNo
+        );
+    
     event Delivered (
         address _producer,
         address _customer
@@ -117,6 +124,9 @@ contract Car {
         owner = msg.sender;
         chassisNo = _chassisNo;
         assemblyLine = _assemblyLine;
+        
+        //Trigger Event Produced
+        Produced(producer, customer, chassisNo);
     } 
     
     //executed as Garage
@@ -147,5 +157,19 @@ contract Car {
         owner = msg.sender;
     } 
     
+    function getState() returns (LifeStates)
+    {
+        return state;
+    } 
+    
+    function () {
+        // This function gets executed if a
+        // transaction with invalid data is sent to
+        // the contract or just ether without data.
+        // We revert the send so that no-one
+        // accidentally loses money when using the
+        // contract.
+        throw;
+    }
    
 }
