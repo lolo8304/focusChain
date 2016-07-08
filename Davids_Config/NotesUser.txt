@@ -1,0 +1,42 @@
+geth init /Users/Lolo/ethereum/focuschain-genesis.json 
+geth --datadir /Users/Lolo/ethereum/focuschainData --networkid 13041969 --port 30301 --rpcport 8101 console
+geth --datadir /Users/Lolo/ethereum/focuschainCluster/01 --networkid 13041969 --port 30302 --rpcport 8102 console
+geth --datadir /Users/Lolo/ethereum/focuschainCluster/02 --networkid 13041969 --port 30303 --rpcport 8103 console
+
+
+
+inti neu: geth --genesis genesis.json --datadir focuschainData --networkid 13041969 --port 30301 --rpcport 8101 console
+
+geth --genesis focuschain-genesis.json --datadir focuschainData --networkid 13041969 --port 30301 --rpcport 8101 console
+
+
+
+account --> focuschainData
+    pw = focusdays2016
+    User = "0x42ca945f5877a0727cdb246b38e8c6e3f41b1bbb"
+    
+    starten: geth --datadir focuschainData --networkid 13041969 --port 30301 --rpcport 8101 console
+
+
+loadScript("functions.js");
+
+    
+    
+miner.start(1);
+admin.sleepBlocks(2);
+miner.stop();
+
+
+netstats
+
+WS_SECRET="focusdays2016"
+
+Start client...
+pm2 start app.json
+Several commands are available:
+
+pm2 list to display the process status;
+pm2 logs to display logs;
+pm2 gracefulReload node-app for a soft reload;
+pm2 stop node-app to stop the app;
+pm2 kill to kill the daemon.
