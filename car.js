@@ -135,14 +135,14 @@ contract Car {
         policyNo = _policyNo;
         
         //Trigger Event
-        Admitted(customer, insuranceId, policyNo);
+        Admitted(owner, insuranceId, policyNo);
     } 
     
-    // executed as the customer
+    // executed as the customer (owner)
     function deliver() 
     {
 		if (!(state == LifeStates.Admitted) && !(state == LifeStates.Sold)) throw;
-        if (customer != msg.sender) throw;
+        if (owner != msg.sender) throw;
 		state = LifeStates.Delivered;
 		owner = msg.sender;
 		holder = msg.sender;
