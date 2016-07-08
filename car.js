@@ -41,6 +41,8 @@ contract Car {
     string public insuranceId;
     string public policyNo;
 
+    
+    //Event Definitions
     event Ordered (
         address _producer,
         address _customer,
@@ -54,10 +56,19 @@ contract Car {
         address _customer,
         string chassisNo
         );
+        
+    event Supplied (
+        address _garage
+        );
     
     event Delivered (
-        address _producer,
         address _customer
+        );
+        
+    event Admitted (
+        address _customer,
+        string _insuranceId,
+        string _policyNo
         );
 
     modifier atState(LifeStates _state) {
@@ -65,7 +76,7 @@ contract Car {
         _
     }
     modifier checkOwner() {
-        if (owner != msg.sender) throw;
+        //if (owner != msg.sender) throw;
         _
     }
     modifier atDamage(DamageStates _state) {
@@ -111,7 +122,11 @@ contract Car {
         details = _details;
         producer = _producer;
         owner = _customer;
-        holder = msg.sender;
+        holder = msg.sender; //virtueller Holder ist Garage
+        
+        //Trigger Ordered Event
+        Ordered (producer, owner, model, ccm, price);
+    
     }
 
     //exectued as assepbly line
@@ -134,7 +149,10 @@ contract Car {
         timedTransitions
         atState(LifeStates.Supplied)
     {
-	holder = msg.sender;
+	    holder = msg.sender;
+	
+	   //Trigger Supplied Event
+	   Supplied(msg.sender);
     } 
 
     //executed as StVa
@@ -144,6 +162,9 @@ contract Car {
 		state = LifeStates.Admitted;
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
+        
+        //Trigger Event
+        Admitted(customer, insuranceId, policyNo);
     } 
     
     // executed as the customer
@@ -154,6 +175,9 @@ contract Car {
 		state = LifeStates.Delivered;
 		owner = msg.sender;
 		holder = msg.sender;
+		
+		//Trigger Event
+		Delivered(owner);
     } 
 	
 	// executed as the owner
