@@ -4,7 +4,7 @@ contract Car {
         Ordered,
         Produced,
         Supplied,
-        Delivered,
+        Inuse,
         Dumped
     }
     enum DamageStates {
@@ -165,7 +165,7 @@ contract Car {
         checkOwner
         atSupplied
     {
-		state = LifeStates.Delivered;
+		state = LifeStates.Inuse;
 		owner = msg.sender;
 		holder = msg.sender;
 		
