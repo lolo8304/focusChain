@@ -77,6 +77,10 @@ contract Car {
         address _oldOwner,
         address _newOwner
         );
+    
+    event Dumped (
+        address _owner
+        );
 
     modifier atState(LifeStates _state) {
         if (state != _state) throw;
@@ -186,6 +190,16 @@ contract Car {
 		Sold(oldOwner, owner);
 	}		
     
+    // executed as the owner
+	function dump(address _owner)
+		checkOwner
+		atSupplied
+	{
+	    if (matriculated) throw;
+        state = LifeStates.Dumped;
+		//Triffer Event
+		Dumped(owner);
+	}	
 	
     function getState() returns (LifeStates)
     {
