@@ -31,15 +31,12 @@ Template.hello.onCreated(function helloOnCreated() {
 			carContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"damageState","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[],"name":"supply","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"model","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[],"name":"getState","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":true,"inputs":[],"name":"customer","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"producer","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":true,"inputs":[],"name":"ccm","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":true,"inputs":[],"name":"details","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"insuranceId","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":true,"inputs":[],"name":"chassisNo","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[],"name":"exmatriculate","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":false,"inputs":[{"name":"_customer","type":"address"}],"name":"sell","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"price","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":false,"inputs":[{"name":"_chassisNo","type":"string"},{"name":"_assemblyLine","type":"string"}],"name":"produce","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"state","outputs":[{"name":"","type":"uint8"}],"type":"function"},{"constant":true,"inputs":[],"name":"policyNo","outputs":[{"name":"","type":"string"}],"type":"function"},{"constant":false,"inputs":[{"name":"_insuranceId","type":"string"},{"name":"_policyNo","type":"string"}],"name":"admit","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"creationTime","outputs":[{"name":"","type":"uint256"}],"type":"function"},{"constant":true,"inputs":[],"name":"holder","outputs":[{"name":"","type":"address"}],"type":"function"},{"constant":false,"inputs":[],"name":"deliver","outputs":[],"type":"function"},{"constant":true,"inputs":[],"name":"assemblyLine","outputs":[{"name":"","type":"string"}],"type":"function"},{"inputs":[{"name":"_model","type":"string"},{"name":"_ccm","type":"uint8"},{"name":"_price","type":"uint8"},{"name":"_details","type":"string"},{"name":"_producer","type":"address"},{"name":"_customer","type":"address"}],"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_producer","type":"address"},{"indexed":false,"name":"_customer","type":"address"},{"indexed":false,"name":"_modell","type":"string"},{"indexed":false,"name":"_ccm","type":"uint8"},{"indexed":false,"name":"_price","type":"uint8"}],"name":"Ordered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_producer","type":"address"},{"indexed":false,"name":"_customer","type":"address"},{"indexed":false,"name":"chassisNo","type":"string"}],"name":"Produced","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_garage","type":"address"}],"name":"Supplied","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_customer","type":"address"}],"name":"Delivered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"_customer","type":"address"},{"indexed":false,"name":"_insuranceId","type":"string"},{"indexed":false,"name":"_policyNo","type":"string"}],"name":"Admitted","type":"event"}]);
 			var contractInstance = carContract.at(contractAddress);
 
-			var event = contractInstance.Produced().watch(function(error, result){
-			if (!error) {
-				console.log("EVENT FIRED");
-				console.log(result);
-			} else {
-				console.log("EVENT ERROR");
-				console.log(error);
-			}
-			});	
+			var trigger = function (event, data, n){
+					console.log("EVENT FIRED");
+					console.log(data);
+			};
+			var event = web3.eth.filter(contractInstance.Produced);
+			event.watch(trigger);
 			
 		}
 			
@@ -47,16 +44,16 @@ Template.hello.onCreated(function helloOnCreated() {
 
 	}
 
-
+/*
 	var contractID = "0x33AC1865B84F768e708B8FAA4eac1d333F84bE9d";
 
 	var filter = web3.eth.filter({
 		fromBlock:0,
 	 	toBlock: 'latest',
 	 	address: contractID
-	 /*,
-		'topics':['0x' + web3.sha3('Produced(address,address,string)')  ]
-		*/
+
+		//,'topics':['0x' + web3.sha3('Produced(address,address,string)')  ]
+
 	});
 	filter.watch(function(error, result) {
 		if(!error) {
@@ -65,6 +62,7 @@ Template.hello.onCreated(function helloOnCreated() {
 			console.log("watch ERROR "+error)
 	 	}
 	})
+	*/
 
 });
 
@@ -73,15 +71,13 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-	'click button'(event, instance) {
-		if (event.currentTarget.id == "deploy") {
-			deployContract(instance);
-		}
-		if (event.currentTarget.id == "produce") {
-			var contractInstance = carContract.at(localStorage.getItem("contract"));
-			var result = contractInstance.produce("123", "BMW Munich");
-		}
+	'click .btnDeploy'(event, instance) {
+		deployContract(instance);
 	},
+	'click .btnProduce'(event, instance) {
+		var contractInstance = carContract.at(localStorage.getItem("contract"));
+		var result = contractInstance.produce("123", "BMW Munich");
+	}
 });
 
 function deployContract(instance) {
