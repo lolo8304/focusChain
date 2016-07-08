@@ -85,6 +85,7 @@ contract Car {
     
     modifier atSupplied() {
         if (uint(state) < 2) throw; //mindestns Supplied
+        if (state == LifeStates.Dumped) throw;
         _
     }
    
@@ -111,6 +112,7 @@ contract Car {
     //exectued as assepbly line
     function produce(string _chassisNo, string _assemblyLine)
     {
+        if (state != LifeStates.Ordered) throw;
         chassisNo = _chassisNo;
         assemblyLine = _assemblyLine;
 		holder = msg.sender;
@@ -124,6 +126,7 @@ contract Car {
     //executed as Garage
     function supply() 
     {
+	    if (state != LifeStates.Produced) throw;
 	    holder = msg.sender;
 	
 	    state = LifeStates.Supplied;
@@ -135,6 +138,7 @@ contract Car {
     function matriculate(string _insuranceId, string _policyNo) 
         atSupplied
     {
+		if (matriculated) throw; //bevor matriculiert wird, muss exmatriculiert werden
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
         matriculated = true;
@@ -143,14 +147,16 @@ contract Car {
         Matriculated(owner, insuranceId, policyNo);
     } 
     
-    function exmatriculate(string _policyNo) 
+    function exmatriculate() 
         atSupplied
     {
+        if (!matriculated) throw;
+        var oldPolicyNo = policyNo;
         policyNo = "";
         matriculated = false;
         
         //Trigger Event
-        Exmatriculated(owner, policyNo);
+        Exmatriculated(owner, oldPolicyNo);
     } 
     
     // executed as the owner (customer)
@@ -180,7 +186,7 @@ contract Car {
 	}		
     
     // executed as the owner
-	function dump(address _owner)
+	function dump()
 		checkOwner
 		atSupplied
 	{
