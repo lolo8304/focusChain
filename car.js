@@ -12,7 +12,6 @@ contract Car {
         SmallIncidentReported,
         AccidentReported,
         DamageAssessed,
-        RepairConfirmed,
         Repaired
     }
     
@@ -81,21 +80,24 @@ contract Car {
 =======
 	
 	event SmallIncidentReported(
+		string _datetime, 
+		string _location
 		);
 	
 	event AccidentReported(
+		string _datetime, 
+		string _location
 		);
 		
 	event DamageAssessed(
-		int256 _damagePrice,
-		bool _isRepairable
+		int256 _damageSumAssessed,
+		bool _isRepairable,
+		string _assessor
 		);
 >>>>>>> 0028dcd... Draft for Claims Process implemented
 
-	event RepairConfirmed(
-		);
-		
 	event Repaired(
+		int256 _damageSum
 		);
 		
     modifier atState(LifeStates _state) {
@@ -210,39 +212,34 @@ contract Car {
 	
 	//========= Claims Process =========
 	
-	function ReporteSmallIncident()
+	function ReporteSmallIncident(string _datetime, string _location)
 	{
 		damageState = DamageStates.SmallIncidentReported;
 		
 		//Trigger Event
-		SmallIncidentReported();
+		SmallIncidentReported(_datetime, _location);
 	}
 	
-	function ReportAccident() 
+	// executed as Police
+	function ReportAccident(string _datetime, string _location) 
 	{
 		damageState = DamageStates.AccidentReported;
 		
 		//Trigger Event
-		AccidentReported();
+		AccidentReported(_datetime, _location);
 	}
 	
-	function AssessDamage(int _damagePrice, bool _isRepairable)
+	function AssessDamage(int256 _damageSumAssessed, bool _isRepairable, string _assessor)
 	{
 		damageState = DamageStates.DamageAssessed;
 		//Trigger Event
-		DamageAssessed(_damagePrice, _isRepairable);
+		DamageAssessed(_damageSumAssessed, _isRepairable, _assessor);
 	}
 	
-	function ConfirmRepair()	{
-		damageState = DamageStates.RepairConfirmed;
-		//Trigger Event
-		RepairConfirmed();
-	}
-
-	function Repair()	{
+	function Repair(int256 _damageSum)	{
 		damageState = DamageStates.Repaired;
 		//Trigger Event
-		Repaired();
+		Repaired(_damageSum);
 	}
 
 	
