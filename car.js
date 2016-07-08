@@ -32,8 +32,8 @@ contract Car {
     address public holder;
     
     string public model;
-    uint public price;
-    uint public ccm;
+    uint8 public price;
+    uint8 public ccm;
     string public details;
     string public chassisNo;
     string public assemblyLine;
@@ -47,8 +47,8 @@ contract Car {
         address _producer,
         address _customer,
         string _modell,
-        uint _ccm,
-        uint _price
+        uint8 _ccm,
+        uint8 _price
         );
     
     event Produced (
@@ -87,35 +87,9 @@ contract Car {
         state = LifeStates(uint(state) + 1);
     }
     
-    // Perform timed transitions. Be sure to mention
-    // this modifier first, otherwise the guards
-    // will not take the new stage into account.
-    modifier timedTransitions() {
-
-        // delivered at least after 1 minute of ordering
-        if (state == LifeStates.Ordered &&
-                    now >= creationTime + 1 seconds)
-            nextState(); // produced
-
-        // delivered at least after 1 minute of ordering
-        if (state == LifeStates.Produced &&
-                now >= creationTime + 1 seconds)
-            nextState(); // delivered
-
-        // delivered at least after 1 minute of ordering
-        if (state == LifeStates.Supplied &&
-                now >= creationTime + 1 seconds)
-            nextState(); // delivered
-            
-        // delivered at least after 1 minute of ordering
-        if (state == LifeStates.Admitted &&
-                now >= creationTime + 1 seconds)
-            nextState(); // delivered
-            
-    }
 
     //executed as Garage
-    function Car (string _model, uint _ccm, uint _price, string _details, address _producer, address _customer) {
+    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer, address _customer) {
         model = _model;
         ccm = _ccm;
         price = _price;
@@ -130,14 +104,13 @@ contract Car {
     }
 
     //exectued as assepbly line
-    function produce(string _chassisNo, string _assemblyLine) 
-        checkOwner
-        timedTransitions
-        atState(LifeStates.Produced)
+    function produce(string _chassisNo, string _assemblyLine)
     {
         chassisNo = _chassisNo;
         assemblyLine = _assemblyLine;
 		holder = msg.sender;
+        
+        state = LifeStates.Produced;
         
         //Trigger Event Produced
         Produced(producer, customer, chassisNo);
@@ -145,14 +118,12 @@ contract Car {
     
     //executed as Garage
     function supply() 
-        checkOwner
-        timedTransitions
-        atState(LifeStates.Supplied)
     {
 	    holder = msg.sender;
 	
-	   //Trigger Supplied Event
-	   Supplied(msg.sender);
+	    state = LifeStates.Supplied;
+	    //Trigger Supplied Event
+	    Supplied(msg.sender);
     } 
 
     //executed as StVa
