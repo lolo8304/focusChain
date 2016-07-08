@@ -4,23 +4,13 @@ contract Car {
         Ordered,
         Produced,
         Supplied,
-        Delivered,
+        Inuse,
         Dumped
     }
-    enum DamageStates {
-        None,
-        SmallIncidentReported,
-        AccidentReported,
-        DamageAssessed,
-        RepairConfirmed,
-        Repaired
-    }
+
     
     // This is the current life stage of the car
     LifeStates public state = LifeStates.Ordered;
-    
-    // This is the current damage stage of the car
-    DamageStates public damageState = DamageStates.None;
     
     uint public creationTime = now;
     address public producer;
@@ -41,43 +31,49 @@ contract Car {
     
     //Event Definitions
     event Ordered (
-        address _producer,
-        address _owner,
-        string _modell,
-        uint8 _ccm,
-        uint8 _price
+        address producer,
+        address owner,
+        string modell,
+        uint8 ccm,
+        uint8 price
         );
     
     event Produced (
-        address _producer,
-        address _owner,
+        address producer,
+        address owner,
         string chassisNo
         );
         
     event Supplied (
-        address _garage
+        address garage
         );
     
     event Delivered (
-        address _owner
+        address owner
         );
         
     event Matriculated (
-        address _owner,
-        string _insuranceId,
-        string _policyNo
+        address owner,
+        string insuranceId,
+        string policyNo
         );
         
     event Exmatriculated (
-        address _owner,
-        string _policyNo
+        address owner,
+        string policyNo
         );
         
     event Sold (
-        address _oldOwner,
-        address _newOwner
+        address oldOwner,
+        address newOwner
         );
 
+    
+    event Dumped (
+        address owner
+        );
+
+		
     modifier atState(LifeStates _state) {
         if (state != _state) throw;
         _
@@ -89,12 +85,10 @@ contract Car {
     
     modifier atSupplied() {
         if (uint(state) < 2) throw; //mindestns Supplied
+        if (state == LifeStates.Dumped) throw;
         _
     }
-    modifier atDamage(DamageStates _state) {
-        if (damageState != _state) throw;
-        _
-    }
+   
     function nextState() internal {
         state = LifeStates(uint(state) + 1);
     }
@@ -118,6 +112,7 @@ contract Car {
     //exectued as assepbly line
     function produce(string _chassisNo, string _assemblyLine)
     {
+        if (state != LifeStates.Ordered) throw;
         chassisNo = _chassisNo;
         assemblyLine = _assemblyLine;
 		holder = msg.sender;
@@ -131,6 +126,7 @@ contract Car {
     //executed as Garage
     function supply() 
     {
+	    if (state != LifeStates.Produced) throw;
 	    holder = msg.sender;
 	
 	    state = LifeStates.Supplied;
@@ -142,6 +138,7 @@ contract Car {
     function matriculate(string _insuranceId, string _policyNo) 
         atSupplied
     {
+		if (matriculated) throw; //bevor matriculiert wird, muss exmatriculiert werden
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
         matriculated = true;
@@ -150,14 +147,16 @@ contract Car {
         Matriculated(owner, insuranceId, policyNo);
     } 
     
-    function exmatriculate(string _policyNo) 
+    function exmatriculate() 
         atSupplied
     {
+        if (!matriculated) throw;
+        var oldPolicyNo = policyNo;
         policyNo = "";
         matriculated = false;
         
         //Trigger Event
-        Exmatriculated(owner, policyNo);
+        Exmatriculated(owner, oldPolicyNo);
     } 
     
     // executed as the owner (customer)
@@ -165,7 +164,7 @@ contract Car {
         checkOwner
         atSupplied
     {
-		state = LifeStates.Delivered;
+		state = LifeStates.Inuse;
 		owner = msg.sender;
 		holder = msg.sender;
 		
@@ -186,6 +185,21 @@ contract Car {
 		Sold(oldOwner, owner);
 	}		
     
+    // executed as the owner
+	function dump()
+		checkOwner
+		atSupplied
+	{
+	    if (matriculated) throw;
+        state = LifeStates.Dumped;
+		//Triffer Event
+		Dumped(owner);
+	}	
+	
+	
+
+
+	
 	
     function getState() returns (LifeStates)
     {
