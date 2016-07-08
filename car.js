@@ -87,10 +87,7 @@ contract Car {
         if (uint(state) < 2) throw; //mindestns Supplied
         _
     }
-    modifier atDamage(DamageStates _state) {
-        if (damageState != _state) throw;
-        _
-    }
+   
     function nextState() internal {
         state = LifeStates(uint(state) + 1);
     }
