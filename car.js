@@ -66,7 +66,6 @@ contract Car {
         string _insuranceId,
         string _policyNo
         );
-<<<<<<< HEAD
         
     event Exmatriculated (
         address _owner,
@@ -77,7 +76,6 @@ contract Car {
         address _oldOwner,
         address _newOwner
         );
-=======
 	
 	event SmallIncidentReported(
 		string _datetime, 
@@ -94,7 +92,6 @@ contract Car {
 		bool _isRepairable,
 		string _assessor
 		);
->>>>>>> 0028dcd... Draft for Claims Process implemented
 
 	event Repaired(
 		int256 _damageSum
