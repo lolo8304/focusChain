@@ -32,8 +32,8 @@ contract Car {
     address public holder;
     
     string public model;
-    uint8 public price;
-    uint8 public ccm;
+    uint public price;
+    uint public ccm;
     string public details;
     string public chassisNo;
     string public assemblyLine;
@@ -45,8 +45,8 @@ contract Car {
         address _producer,
         address _customer,
         string _modell,
-        uint8 _ccm,
-        uint8 _price
+        uint _ccm,
+        uint _price
         );
     
     event Produced (
@@ -104,7 +104,7 @@ contract Car {
     }
 
     //executed as Garage
-    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer, address _customer) {
+    function Car (string _model, uint _ccm, uint _price, string _details, address _producer, address _customer) {
         model = _model;
         ccm = _ccm;
         price = _price;
