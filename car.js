@@ -67,6 +67,7 @@ contract Car {
         string _insuranceId,
         string _policyNo
         );
+<<<<<<< HEAD
         
     event Exmatriculated (
         address _owner,
@@ -77,7 +78,26 @@ contract Car {
         address _oldOwner,
         address _newOwner
         );
+=======
+	
+	event SmallIncidentReported(
+		);
+	
+	event AccidentReported(
+		);
+		
+	event DamageAssessed(
+		int256 _damagePrice,
+		bool _isRepairable
+		);
+>>>>>>> 0028dcd... Draft for Claims Process implemented
 
+	event RepairConfirmed(
+		);
+		
+	event Repaired(
+		);
+		
     modifier atState(LifeStates _state) {
         if (state != _state) throw;
         _
@@ -186,6 +206,46 @@ contract Car {
 		Sold(oldOwner, owner);
 	}		
     
+	
+	
+	//========= Claims Process =========
+	
+	function ReporteSmallIncident()
+	{
+		damageState = DamageStates.SmallIncidentReported;
+		
+		//Trigger Event
+		SmallIncidentReported();
+	}
+	
+	function ReportAccident() 
+	{
+		damageState = DamageStates.AccidentReported;
+		
+		//Trigger Event
+		AccidentReported();
+	}
+	
+	function AssessDamage(int _damagePrice, bool _isRepairable)
+	{
+		damageState = DamageStates.DamageAssessed;
+		//Trigger Event
+		DamageAssessed(_damagePrice, _isRepairable);
+	}
+	
+	function ConfirmRepair()	{
+		damageState = DamageStates.RepairConfirmed;
+		//Trigger Event
+		RepairConfirmed();
+	}
+
+	function Repair()	{
+		damageState = DamageStates.Repaired;
+		//Trigger Event
+		Repaired();
+	}
+
+	
 	
     function getState() returns (LifeStates)
     {
