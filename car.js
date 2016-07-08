@@ -7,20 +7,10 @@ contract Car {
         Inuse,
         Dumped
     }
-    enum DamageStates {
-        None,
-        SmallIncidentReported,
-        AccidentReported,
-        DamageAssessed,
-        RepairConfirmed,
-        Repaired
-    }
+
     
     // This is the current life stage of the car
     LifeStates public state = LifeStates.Ordered;
-    
-    // This is the current damage stage of the car
-    DamageStates public damageState = DamageStates.None;
     
     uint public creationTime = now;
     address public producer;
@@ -77,11 +67,13 @@ contract Car {
         address _oldOwner,
         address _newOwner
         );
+
     
     event Dumped (
         address _owner
         );
 
+		
     modifier atState(LifeStates _state) {
         if (state != _state) throw;
         _
@@ -200,6 +192,11 @@ contract Car {
 		//Triffer Event
 		Dumped(owner);
 	}	
+	
+	
+
+
+	
 	
     function getState() returns (LifeStates)
     {
