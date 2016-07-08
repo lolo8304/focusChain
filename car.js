@@ -74,6 +74,7 @@ contract Car {
         if (state == LifeStates.Produced &&
                 now >= creationTime + 1 minutes)
             nextState(); // delivered
+            
     }
 
     function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer) {
@@ -93,6 +94,12 @@ contract Car {
         assemblyLine = _assemblyLine;
     } 
     
-
+    function deliver(address _garage) 
+        timedTransitions
+        atState(LifeStates.Delivered)
+    {
+        owner = _garage;
+    } 
+    
    
 }
