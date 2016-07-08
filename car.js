@@ -3,6 +3,7 @@ contract Car {
     enum LifeStates {
         Ordered,
         Produced,
+        Received,
         Delivered,
         Admitted,
         ExMatriculated,
@@ -26,8 +27,8 @@ contract Car {
     
     uint public creationTime = now;
     address public producer;
-    address public owner = msg.sender;
-    address public holder = msg.sender;
+    address public owner;
+    address public customer;
     
     string public model;
     uint8 public price;
@@ -83,6 +84,8 @@ contract Car {
         price = _price;
         details = _details;
         producer = _producer;
+        owner = _producer;
+        customer = msg.sender;
     }
 
     function produce(string _chassisNo, string _assemblyLine) 
@@ -94,11 +97,11 @@ contract Car {
         assemblyLine = _assemblyLine;
     } 
     
-    function deliver(address _garage) 
+    function receive() 
         timedTransitions
-        atState(LifeStates.Delivered)
+        atState(LifeStates.Received)
     {
-        owner = _garage;
+        owner = msg.sender;
     } 
     
    
