@@ -15,6 +15,7 @@ contract Car {
         SmallIncidentReported,
         AccidentReported,
         DamageAssessed,
+        RepairConfirmed,
         Repaired
     }
     
@@ -69,27 +70,7 @@ contract Car {
         string _insuranceId,
         string _policyNo
         );
-	
-	event SmallIncidentReported(
-		string _datetime, 
-		string _location
-		);
-	
-	event AccidentReported(
-		string _datetime, 
-		string _location
-		);
-		
-	event DamageAssessed(
-		int256 _damageSumAssessed,
-		bool _isRepairable,
-		string _assessor
-		);
 
-	event Repaired(
-		int256 _damageSum
-		);
-		
     modifier atState(LifeStates _state) {
         if (state != _state) throw;
         _
@@ -148,7 +129,7 @@ contract Car {
     //executed as StVa
     function admit(string _insuranceId, string _policyNo) 
     {
-        if (!(state == LifeStates.Supplied) || !(state == LifeStates.ExMatriculated)) throw;
+        if (!(state == LifeStates.Supplied) && !(state == LifeStates.ExMatriculated)) throw;
 		state = LifeStates.Admitted;
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
@@ -160,7 +141,7 @@ contract Car {
     // executed as the customer
     function deliver() 
     {
-		if (!(state == LifeStates.Admitted) || !(state == LifeStates.Sold)) throw;
+		if (!(state == LifeStates.Admitted) && !(state == LifeStates.Sold)) throw;
         if (customer != msg.sender) throw;
 		state = LifeStates.Delivered;
 		owner = msg.sender;
@@ -188,41 +169,6 @@ contract Car {
         policyNo = '';
 		state = LifeStates.ExMatriculated;
     } 
-	
-	
-	//========= Claims Process =========
-	
-	function ReporteSmallIncident(string _datetime, string _location)
-	{
-		damageState = DamageStates.SmallIncidentReported;
-		
-		//Trigger Event
-		SmallIncidentReported(_datetime, _location);
-	}
-	
-	// executed as Police
-	function ReportAccident(string _datetime, string _location) 
-	{
-		damageState = DamageStates.AccidentReported;
-		
-		//Trigger Event
-		AccidentReported(_datetime, _location);
-	}
-	
-	function AssessDamage(int256 _damageSumAssessed, bool _isRepairable, string _assessor)
-	{
-		damageState = DamageStates.DamageAssessed;
-		//Trigger Event
-		DamageAssessed(_damageSumAssessed, _isRepairable, _assessor);
-	}
-	
-	function Repair(int256 _damageSum)	{
-		damageState = DamageStates.Repaired;
-		//Trigger Event
-		Repaired(_damageSum);
-	}
-
-	
 	
     function getState() returns (LifeStates)
     {
