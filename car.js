@@ -14,7 +14,8 @@ contract Car {
         SmallIncidentReported,
         AccidentReported,
         DamageAssessed,
-        RepairConfirmed
+        RepairConfirmed,
+        Repaired
     }
     
     // This is the current life stage of the car
@@ -24,9 +25,9 @@ contract Car {
     DamageStates public damageState = DamageStates.None;
     
     uint public creationTime = now;
-    address public producer = msg.sender;
+    address public producer;
     address public owner = msg.sender;
-    address public holder;
+    address public holder = msg.sender;
     
     string public model;
     uint8 public price;
@@ -75,12 +76,12 @@ contract Car {
             nextState(); // delivered
     }
 
-    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _holder) {
+    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer) {
         model = _model;
         ccm = _ccm;
         price = _price;
         details = _details;
-        holder = _holder;
+        producer = _producer;
     }
 
     function produce(string _chassisNo, string _assemblyLine) 
