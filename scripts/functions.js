@@ -14,6 +14,10 @@ balance = web3.fromWei(eth.getBalance(primary), "ether");
 console.log("balance = " + balance);
 };
 
+function unlock() {
+personal.unlockAccount(eth.accounts[0],"focusdays2016");
+}
+
 //add peers after load
 admin.addPeer("enode://cca684b34842cf14f3ba063453d54c3145985e7d232412922a5580584e799f657d55ccaa609ca2b0d2eac9102a8f43842347e0bf53768fc26d5b63f7e260ab56@192.168.2.105:30301");
 admin.addPeer("enode://f5dac0d67263d3b072fdc56eec376a85005cc0858b84ff07497a4decc3e401e34a3154d4eef54c69867f85f0250372586984adc6d390ad516338aa65b8795517@192.168.2.111:30301");
