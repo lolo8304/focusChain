@@ -4,10 +4,7 @@ contract Car {
         Ordered,
         Produced,
         Supplied,
-        Admitted,
         Delivered,
-        Sold,
-        ExMatriculated,
         Dumped
     }
     enum DamageStates {
@@ -28,7 +25,6 @@ contract Car {
     uint public creationTime = now;
     address public producer;
     address public owner;
-    address public customer;
     address public holder;
     
     string public model;
@@ -40,12 +36,13 @@ contract Car {
     
     string public insuranceId;
     string public policyNo;
+    bool public matriculated = false;
 
     
     //Event Definitions
     event Ordered (
         address _producer,
-        address _customer,
+        address _owner,
         string _modell,
         uint8 _ccm,
         uint8 _price
@@ -53,7 +50,7 @@ contract Car {
     
     event Produced (
         address _producer,
-        address _customer,
+        address _owner,
         string chassisNo
         );
         
@@ -62,13 +59,23 @@ contract Car {
         );
     
     event Delivered (
-        address _customer
+        address _owner
         );
         
-    event Admitted (
-        address _customer,
+    event Matriculated (
+        address _owner,
         string _insuranceId,
         string _policyNo
+        );
+        
+    event Exmatriculated (
+        address _owner,
+        string _policyNo
+        );
+        
+    event Sold (
+        address _oldOwner,
+        address _newOwner
         );
 
     modifier atState(LifeStates _state) {
@@ -76,7 +83,12 @@ contract Car {
         _
     }
     modifier checkOwner() {
-        //if (owner != msg.sender) throw;
+        if (owner != msg.sender) throw;
+        _
+    }
+    
+    modifier atSupplied() {
+        if (uint(state) < 2) throw; //mindestns Supplied
         _
     }
     modifier atDamage(DamageStates _state) {
@@ -89,13 +101,13 @@ contract Car {
     
 
     //executed as Garage
-    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer, address _customer) {
+    function Car (string _model, uint8 _ccm, uint8 _price, string _details, address _producer, address _owner) {
         model = _model;
         ccm = _ccm;
         price = _price;
         details = _details;
         producer = _producer;
-        owner = _customer;
+        owner = _owner;
         holder = msg.sender; //virtueller Holder ist Garage
         
         //Trigger Ordered Event
@@ -113,7 +125,7 @@ contract Car {
         state = LifeStates.Produced;
         
         //Trigger Event Produced
-        Produced(producer, customer, chassisNo);
+        Produced(producer, owner, chassisNo);
     } 
     
     //executed as Garage
@@ -127,22 +139,32 @@ contract Car {
     } 
 
     //executed as StVa
-    function admit(string _insuranceId, string _policyNo) 
+    function matriculate(string _insuranceId, string _policyNo) 
+        atSupplied
     {
-        if (!(state == LifeStates.Supplied) && !(state == LifeStates.ExMatriculated)) throw;
-		state = LifeStates.Admitted;
 		insuranceId = _insuranceId;
         policyNo = _policyNo;
+        matriculated = true;
         
         //Trigger Event
-        Admitted(owner, insuranceId, policyNo);
+        Matriculated(owner, insuranceId, policyNo);
     } 
     
-    // executed as the customer (owner)
-    function deliver() 
+    function exmatriculate(string _policyNo) 
+        atSupplied
     {
-		if (!(state == LifeStates.Admitted) && !(state == LifeStates.Sold)) throw;
-        if (owner != msg.sender) throw;
+        policyNo = "";
+        matriculated = false;
+        
+        //Trigger Event
+        Exmatriculated(owner, policyNo);
+    } 
+    
+    // executed as the owner (customer)
+    function deliver() 
+        checkOwner
+        atSupplied
+    {
 		state = LifeStates.Delivered;
 		owner = msg.sender;
 		holder = msg.sender;
@@ -152,23 +174,18 @@ contract Car {
     } 
 	
 	// executed as the owner
-	function sell(address _customer)
+	function sell(address _owner)
 		checkOwner
+		atSupplied
 	{
-		if (state == LifeStates.Delivered) throw;
-		state = LifeStates.Sold;
-		owner = _customer;
-		holder = _customer;
+		var oldOwner = owner;
+		owner = _owner;
+		holder = _owner;
 		
+		//Triffer Event
+		Sold(oldOwner, owner);
 	}		
     
-	//executed as StVa or Garage
-    function exmatriculate() 
-    {
-        insuranceId = '';
-        policyNo = '';
-		state = LifeStates.ExMatriculated;
-    } 
 	
     function getState() returns (LifeStates)
     {
