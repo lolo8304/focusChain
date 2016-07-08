@@ -23,3 +23,7 @@ admin.addPeer("enode://8160b3dd43bcd2594371100b32dd9c91687c576af37c685bfd4bde09b
 admin.addPeer("enode://1bf37f0f5fcafdd44b38df33cc332ab48384aa4595786e6edc98130119eac28ec9e7b4f7f2f276f8a5fcb5eeb9810c704ce548e52bf93f40514a33c19750f666@192.168.2.115:30301");
 admin.addPeer("enode://c1081dfd63b8d82e33ef009d08ec5d49b53d001d4fbf5c386c932af6cbd5f78dce3c46351119334baaef1a50ec643e7ec236358c20fac4db7c1ea9fc15d5c1cb@192.168.2.104:30301");
 admin.addPeer("enode://5d62d24c55ac067da61462346adc07707ab4fd611ba980af8392161eaaced96c4a6cfe29ce3746ea2a5c1109af396d6428fa88de1f772f5d524a15be8601044f@192.168.2.113:30301");
+
+
+// remove all --rpc* arguments in commandline
+admin.startRPC("0.0.0.0", 8101, "*", "web3,net,eth");
