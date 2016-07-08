@@ -82,7 +82,7 @@ Template.hello.helpers({
 });
 
 Template.hello.events({
-	'click button .produce'(event, instance) {
+	'click .btnProduce'(event, instance) {
 		if (event.currentTarget.id == "deploy") {
 			//deployContract(instance);
 		}
