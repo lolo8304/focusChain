@@ -31,46 +31,46 @@ contract Car {
     
     //Event Definitions
     event Ordered (
-        address _producer,
-        address _owner,
-        string _modell,
-        uint8 _ccm,
-        uint8 _price
+        address producer,
+        address owner,
+        string modell,
+        uint8 ccm,
+        uint8 price
         );
     
     event Produced (
-        address _producer,
-        address _owner,
+        address producer,
+        address owner,
         string chassisNo
         );
         
     event Supplied (
-        address _garage
+        address garage
         );
     
     event Delivered (
-        address _owner
+        address owner
         );
         
     event Matriculated (
-        address _owner,
-        string _insuranceId,
-        string _policyNo
+        address owner,
+        string insuranceId,
+        string policyNo
         );
         
     event Exmatriculated (
-        address _owner,
-        string _policyNo
+        address owner,
+        string policyNo
         );
         
     event Sold (
-        address _oldOwner,
-        address _newOwner
+        address oldOwner,
+        address newOwner
         );
 
     
     event Dumped (
-        address _owner
+        address owner
         );
 
 		
